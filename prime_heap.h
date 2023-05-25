@@ -16,73 +16,10 @@ struct Node {
 };
 
 class MinHeap {
-    vector<Node> heap; // Binary heap
-    vector<int> position; // Position of nodes in the heap
-    int size; // Current size of the heap
+    vector<Node> heap;      // Binary heap
+    vector<int> position;   // Position of nodes in the heap
+    int size;               // Current size of the heap
 
-public:
-    MinHeap(int capacity) {
-        heap.resize(capacity);
-        position.resize(capacity);
-        size = 0;
-    }
-
-    void insert(int vertex, int key) {
-        if (size == heap.size()) {
-            cout << "Heap capacity reached!" << endl;
-            return;
-        }
-
-        Node newNode;
-        newNode.vertex = vertex;
-        newNode.key = key;
-
-        int i = size;
-        heap[i] = newNode;
-        position[vertex] = i;
-        size++;
-
-        // Maintain the heap property by performing up-heapify
-        while (i > 0 && heap[parent(i)].key > heap[i].key) {
-            swapNodes(i, parent(i));
-            i = parent(i);
-        }
-    }
-
-    bool empty() {
-        return size == 0;
-    }
-
-    Node extractMin() {
-        if (empty()) {
-            cout << "Heap is empty!" << endl;
-            return { -1, -1 };
-        }
-
-        Node minNode = heap[0];
-        size--;
-
-        // Replace the root with the last node and perform down-heapify
-        heap[0] = heap[size];
-        position[minNode.vertex] = 0;
-        position[heap[0].vertex] = size;
-        minHeapify(0);
-
-        return minNode;
-    }
-
-    void decreaseKey(int vertex, int newKey) {
-        int i = position[vertex];
-        heap[i].key = newKey;
-
-        // Maintain the heap property by performing up-heapify
-        while (i > 0 && heap[parent(i)].key > heap[i].key) {
-            swapNodes(i, parent(i));
-            i = parent(i);
-        }
-    }
-
-private:
     int parent(int i) {
         return (i - 1) / 2;
     }
@@ -117,6 +54,70 @@ private:
             minHeapify(smallest);
         }
     }
+
+public:
+    MinHeap(int capacity) {
+        heap.resize(capacity);
+        position.resize(capacity);
+        size = 0;
+    }
+
+    void insert(int vertex, int key) {
+        if (size == heap.size()) {
+            cout << "Heap capacity reached!" << endl;
+            return;
+        }
+
+        Node newNode;
+        newNode.vertex = vertex;
+        newNode.key = key;
+
+        int i = size;
+        heap[i] = newNode;
+        position[vertex] = i;
+        size++;
+
+        // Maintain the heap property by performing up-heapify
+        while (i > 0 && heap[parent(i)].key > heap[i].key) {
+            swapNodes(i, parent(i));
+            i = parent(i);
+        }
+    }
+
+    bool empty() {
+        return size == 0;   //Very minimalistic, makes code more readable
+    }
+
+    Node extractMin() {
+        if (empty()) {
+            cout << "Heap is empty!" << endl;
+            return { -1, -1 };
+        }
+
+        Node minNode = heap[0];
+        size--;
+
+        // Replace the root with the last node and perform down-heapify
+        heap[0] = heap[size];
+        position[minNode.vertex] = 0;
+        position[heap[0].vertex] = size;
+        minHeapify(0);
+
+        return minNode;
+    }
+
+    void decreaseKey(int vertex, int newKey) {
+        int i = position[vertex];
+        heap[i].key = newKey;
+
+        // Maintain the heap property by performing up-heapify
+        while (i > 0 && heap[parent(i)].key > heap[i].key) {
+            swapNodes(i, parent(i));
+            i = parent(i);
+        }
+    }
+
+
 };
 
 class Graph {
