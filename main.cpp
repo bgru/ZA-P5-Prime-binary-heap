@@ -1,8 +1,8 @@
 #include "prime_heap.h"
 
 int main() {
-    int V = 7; // Number of vertices
 
+    int V = 7; // Number of vertices
     Graph g(V);
 
     // Adding edges to the graph
