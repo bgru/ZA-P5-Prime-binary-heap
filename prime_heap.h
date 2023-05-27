@@ -4,6 +4,8 @@
 
 using namespace std;
 
+// complexity O( (V + E) log V )
+
 // Edge structure
 struct Edge {
     int src, dest, weight;
