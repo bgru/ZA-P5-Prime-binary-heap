@@ -113,30 +113,37 @@ public:
     }
 
     void primMST() {
-        vector<int> parent(V);
+        vector<int> parent(V, -1);
+        vector<bool> inMST(V, false); // To check if vertex is included in MST
         BinHeap binHeap(V);
 
+        // Make key value of 0 as 0 and other vertices as infinity
         binHeap.decreaseKey(0, 0);
-        parent[0] = -1;
 
-        while (!binHeap.isEmpty()) { //zlozonosc
+        // Loop until heap is not empty
+        while (!binHeap.isEmpty()) {
+            // Extract minimum vertex node
             Node node = binHeap.extractMin();
             int u = node.vertex;
 
-            for (Edge edge : edges) {
-                if ((edge.src == u || edge.dest == u) && binHeap.isInHeap(u == edge.src ? edge.dest : edge.src)) {
-                    int v = u == edge.src ? edge.dest : edge.src;
+            // Include extracted vertex into MST
+            inMST[u] = true;
 
-                    if (edge.weight < binHeap.getKey(v)) {
-                        binHeap.decreaseKey(v, edge.weight);
-                        parent[v] = u;
-                    }
+            // Traverse all edges from extracted vertex and update the keys
+            for (Edge edge : edges) {
+                int v = (edge.src == u) ? edge.dest : (edge.dest == u) ? edge.src : -1;
+
+                if (v != -1 && inMST[v] == false && edge.weight < binHeap.getKey(v)) {
+                    parent[v] = u;
+                    binHeap.decreaseKey(v, edge.weight);
                 }
             }
         }
 
+        // Print MST
         for (int i = 1; i < V; ++i) {
             cout << parent[i] << " - " << i << endl;
         }
     }
+
 };
